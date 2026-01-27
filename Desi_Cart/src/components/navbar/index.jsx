@@ -25,6 +25,12 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const onMenuClick = (item) => {
+    naviagte(`/${item.toLowerCase()}`);
+  }
+  const ShpooingCart = () => {
+   naviagte('/cart');
+  }
   const naviagte = useNavigate();
 const HandleClick = (e) => {
   naviagte(e);
@@ -90,12 +96,9 @@ const HandleClick = (e) => {
               </div>
 
               {/* CART */}
-              <button className="relative rounded-md p-2 text-gray-700 hover:bg-gray-100">
+              <button className="relative rounded-md p-2 text-gray-700 hover:bg-gray-100" onClick={ShpooingCart}>
                 <span className="material-symbols-outlined text-[22px]">
                   shopping_cart
-                </span>
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
-                  2
                 </span>
               </button>
 
@@ -115,9 +118,9 @@ const HandleClick = (e) => {
                 </MenuButton>
 
                 <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5">
-                  {["Profile", "Settings", "Logout"].map((item) => (
+                  {["Profile", "Settings", "LogIn"].map((item) => (
                     <MenuItem key={item}>
-                      <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={()=>{onMenuClick(item)}}>
                         {item}
                       </a>
                     </MenuItem>

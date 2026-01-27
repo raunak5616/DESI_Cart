@@ -5,6 +5,9 @@ import Cart from "../../pages/cart";
 import Contact from "../../pages/contact";
 import Shop from "../../pages/shop";
 import Support from "../../pages/support";
+import Product from "../../pages/product";
+import Login from "../../pages/login";
+import Signup from "../../pages/signup";
 
 
 const AppRouter = () => {
@@ -16,7 +19,9 @@ const AppRouter = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/Shop" element={<Shop />} />
         <Route path="/Support" element={<Support />} />
-
+        <Route path="/Products" element={<Product />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </BrowserRouter>
   );
