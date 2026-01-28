@@ -1,9 +1,42 @@
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/auth.context/index.jsx";
 
+const{login}=useAuth;
 const Login = () => {
-    const navigatae = useNavigate();
+  const [loginData,setLoginData]=useState({
+    email:"",
+    password:""
+  });
+  const navigate = useNavigate();
+const onLoginChnage = (e) =>{
+  setLoginData({
+    ...loginData,
+      [e.target.name]:e.target.value
+    
+  })
+}
+const onsubmitPress = async (e) =>{
+  e.preventDefault();
+  try {
+    const response = await axios.post("http://localhost:5000/api/auth/login",
+      loginData,
+      {
+      headers:{
+        "Content-Type":"application/json"
+      }
+    });
+    alert(response.data.message);
+    const token = response.data.token;
+    login(token);
+    navigate("/");
+  } catch (error) {
+    console.log(error);
+  }
+}
     const signup = () => {
-        navigatae('/signup');
+        navigate('/signup');
     }
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
@@ -26,7 +59,10 @@ const Login = () => {
               Email
             </label>
             <input
+            name="email"
               type="email"
+              value={loginData.email}
+              onChange={onLoginChnage}
               placeholder="you@example.com"
               className="rounded-2xl border border-gray-300 px-4 py-3 text-sm
                          focus:border-black focus:outline-none focus:ring-2 focus:ring-black/20"
@@ -39,8 +75,11 @@ const Login = () => {
               Password
             </label>
             <input
+            name="password"
+            value={loginData.password}
               type="password"
               placeholder="••••••••"
+              onChange={onLoginChnage}
               className="rounded-2xl border border-gray-300 px-4 py-3 text-sm
                          focus:border-black focus:outline-none focus:ring-2 focus:ring-black/20"
             />
@@ -59,6 +98,7 @@ const Login = () => {
                        transition-all duration-200
                        hover:scale-105 hover:bg-gray-900
                        active:scale-95"
+                       onClick={onsubmitPress}
           >
             Login
           </button>

@@ -34,12 +34,10 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use("/api/auth", auth)
-app.post("/", (req, res) => {
-  console.log("Headers:", req.headers);
-  console.log("Body:", req.body);
 
-  res.json({ message: "Data received", data: req.body });
+app.use("/api/auth", auth)
+app.get("/", (req, res) => {
+  res.send("API running 🚀");
 });
 
 

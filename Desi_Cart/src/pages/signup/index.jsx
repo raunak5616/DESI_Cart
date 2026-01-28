@@ -30,7 +30,6 @@ const Signup = () => {
 }
 
   setError("");
-  console.log("Form Data:", formData);
   console.log("Form submitted successfully");
   if(!error){
    try{ 
