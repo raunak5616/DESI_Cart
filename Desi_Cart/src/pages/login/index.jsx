@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth.context/index.jsx";
 
-const { login } = useAuth;
 const Login = () => {
+  const { login,isAuthenticated  } = useAuth();
   const [loginData, setLoginData] = useState({
     email: "",
     password: ""

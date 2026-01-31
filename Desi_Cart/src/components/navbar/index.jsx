@@ -25,7 +25,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-  const {isAuthenticated,logout}=useAuth;
+  const {isAuthenticated,logout}=useAuth();
   const navigate = useNavigate();
   const ShpooingCart = () => {
     if(!isAuthenticated){

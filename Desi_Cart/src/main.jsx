@@ -5,10 +5,8 @@ import App from './App.jsx'
 import { AuthProvider } from './context/auth.context/index.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <AuthProvider>
-
     <App />
     </AuthProvider>
-  </StrictMode>,
+
 )
