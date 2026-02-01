@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth.context/index.jsx";
 
 const Login = () => {
-  const { login,isAuthenticated  } = useAuth();
+  const { login } = useAuth();
   const [loginData, setLoginData] = useState({
     email: "",
     password: ""
