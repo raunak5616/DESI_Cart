@@ -1,0 +1,28 @@
+{
+  "name": "seller-backend",
+  "version": "1.0.0",
+  "description": "Backend API for DESI Cart seller panel",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "jwt",
+    "backend"
+  ],
+  "author": "Raunak Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.1.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
