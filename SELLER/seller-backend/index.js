@@ -17,10 +17,11 @@ app.use(express.urlencoded({ extended: true }));
 // ROUTES FIRST
 app.use("/api/products", productRoutes);
 async function startServer() {
+  const PORT = process.env.PORT;
   try {
     await connectToDb();
-    app.listen(8080, () => {
-      console.log("Server running at http://localhost:8080");
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.log(error);

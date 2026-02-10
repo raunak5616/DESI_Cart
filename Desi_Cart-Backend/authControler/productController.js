@@ -2,6 +2,7 @@ import productModel from "../mongodb/models/productModel.js"
 
 export const getProducts = async (req,res) =>{
     try {
+        console.log("🚀 GET PRODUCTS HIT")  ;
         const product = await productModel.find();
         res.status(200).json(product);
     } catch (error) {
