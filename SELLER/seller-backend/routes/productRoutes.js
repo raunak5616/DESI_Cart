@@ -4,10 +4,6 @@ import { createProduct } from "../controllers/productControllers.js";
 
 const router = express.Router();
 
-router.post(
-  "/products",
-  upload.array("images", 5),
-  createProduct
-);
+router.post("/", upload.array("images", 5), createProduct);
 
 export default router;

@@ -34,7 +34,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 app.use("/api/auth", auth)
 app.get("/", (req, res) => {
   res.send("API running 🚀");
