@@ -5,6 +5,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 export default function RecipeReviewCard({ product }) {
+  const {
+    images: [{ url } = {}] = [],
+  } = product || {};
    const onFavoriteClick = () => {
 }
  const onCartClick = () => {
@@ -20,15 +23,15 @@ export default function RecipeReviewCard({ product }) {
       <CardMedia
         component="img"
         height="194"
-        image={product?.images?.[0] || "/no-image.png"}
-        alt={product?.title || "product image"}
+        image={url || "/no-image.png"}
+        alt={product?.name || "product image"}
       />
       <CardContent>
         <Typography fontWeight="bold" sx={{ p: 1, }}>
-          <div className="text-gray-500">{product?.title}</div>
+          <div className="text-gray-500">{product?.description}</div>
         </Typography>
         <Typography variant="body2" sx={{ p: 1, fontSize: '16px' }}>
-          Price:   ₹{(product.price * 83).toFixed(0)}
+          Price:   ₹{(product.price).toFixed(0)}
         </Typography>
       </CardContent>
       <CardActions sx={{
