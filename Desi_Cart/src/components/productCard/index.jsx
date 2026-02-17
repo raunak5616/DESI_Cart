@@ -4,14 +4,30 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CardActions from "@mui/material/CardActions";
+import { useCart } from "../../context/card.context/useCartContext";
+import { findFavroite } from "../../utils/findFavroite";
+import { findCart } from "../../utils/findCartitem";
+
 
 export default function RecipeReviewCard({ product }) {
+  const { cartDispatch, cart , favourite } = useCart();
+  const isFavorite = findFavroite(favourite, product?.id);
+  const isInCart = findCart(cart, product?.id);
   const {
     images: [{ url } = {}] = [],
   } = product || {};
-
-  const onFavoriteClick = () => {};
-  const onCartClick = () => {};
+  const onFavoriteClick = () => {
+    cartDispatch({
+      type: isFavorite?"REMOVE_FROM_FAVORITE":"ADD_TO_FAVORITE",
+      payload:isFavorite?product.id:product,
+    })
+  };
+  const onCartClick = () => {
+    cartDispatch({
+      type: isInCart?"REMOVE_FROM_CART":"ADD_TO_CART",
+      payload: isInCart?product.id:product,
+    })
+  };
 
   return (
     <Card

@@ -1,0 +1,1 @@
+export const findFavroite = (data, id) => data.length > 0 && data.some((item)=> item.id === id)

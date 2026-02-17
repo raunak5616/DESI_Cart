@@ -1,13 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import Home from "../../pages/home";
-import Cart from "../../pages/cart";
+import {Cart} from "../../pages/cart";
 import Contact from "../../pages/contact";
 import Shop from "../../pages/shop";
 import Support from "../../pages/support";
 import Product from "../../pages/product";
 import Login from "../../pages/login";
 import Signup from "../../pages/signup";
+import Profile from "../../pages/profile";
+import Footer from "../../components/footer";
 
 
 const AppRouter = () => {
@@ -22,7 +24,10 @@ const AppRouter = () => {
         <Route path="/Products" element={<Product />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };

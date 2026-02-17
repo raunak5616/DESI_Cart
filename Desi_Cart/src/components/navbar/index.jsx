@@ -8,9 +8,8 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import { LocationProvider } from "../../context/locationContext/location.provider";
-import { useLocationContext } from "../../context/locationContext/useLocationContext";
 
+import { useLocationContext } from "../../context/locationContext/useLocationContext";
 import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
@@ -27,6 +26,7 @@ export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const { address, detectLocation } = useLocationContext();
+
   const handleCartClick = () => {
     if (!isAuthenticated) {
       alert("Please login to access cart");
@@ -42,7 +42,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
 
           {/* LEFT SIDE */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
 
             {/* LOGO */}
             <div
@@ -51,9 +51,11 @@ export default function Navbar() {
             >
               DesiCart
             </div>
+
+            {/* LOCATION */}
             <div
               onClick={detectLocation}
-              className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-3 py-1 rounded-md"
+              className="hidden sm:flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-3 py-1 rounded-md"
             >
               <span className="material-symbols-outlined text-green-600">
                 location_on
@@ -66,17 +68,19 @@ export default function Navbar() {
                 </span>
               </div>
             </div>
+
             {/* DESKTOP NAVIGATION */}
-            <div className="hidden md:flex gap-6">
+            <div className="hidden lg:flex gap-6">
               {navigation.map((item) => (
                 <NavLink
                   key={item.name}
                   to={item.href}
                   end
                   className={({ isActive }) =>
-                    `px-3 py-2 rounded-md text-sm font-medium transition ${isActive
-                      ? "bg-green-600 text-white"
-                      : "text-gray-700 hover:bg-gray-100"
+                    `px-3 py-2 rounded-md text-sm font-medium transition ${
+                      isActive
+                        ? "bg-green-600 text-white"
+                        : "text-gray-700 hover:bg-gray-100"
                     }`
                   }
                 >
@@ -89,8 +93,8 @@ export default function Navbar() {
           {/* RIGHT SIDE */}
           <div className="flex items-center gap-4">
 
-            {/* SEARCH */}
-            <div className="hidden md:flex items-center border border-gray-300 rounded-md px-3 py-1.5">
+            {/* SEARCH (Desktop only) */}
+            <div className="hidden lg:flex items-center border border-gray-300 rounded-md px-3 py-1.5">
               <span className="material-symbols-outlined text-gray-500 text-[20px]">
                 search
               </span>
@@ -116,8 +120,8 @@ export default function Navbar() {
               <BellIcon className="h-6 w-6 text-gray-700" />
             </button>
 
-            {/* PROFILE MENU */}
-            <Menu as="div" className="relative">
+            {/* PROFILE MENU (Desktop only) */}
+            <Menu as="div" className="relative hidden lg:block">
               <MenuButton>
                 <img
                   className="h-8 w-8 rounded-full"
@@ -174,7 +178,7 @@ export default function Navbar() {
             </Menu>
 
             {/* MOBILE MENU BUTTON */}
-            <DisclosureButton className="md:hidden p-2 rounded-md hover:bg-gray-100">
+            <DisclosureButton className="lg:hidden p-2 rounded-md hover:bg-gray-100">
               <Bars3Icon className="h-6 w-6 text-gray-700 data-open:hidden" />
               <XMarkIcon className="h-6 w-6 text-gray-700 hidden data-open:block" />
             </DisclosureButton>
@@ -183,26 +187,61 @@ export default function Navbar() {
       </div>
 
       {/* MOBILE PANEL */}
-      <DisclosurePanel className="md:hidden bg-white border-t border-gray-200">
+      <DisclosurePanel className="lg:hidden bg-white border-t border-gray-200">
+
         <div className="space-y-1 px-4 py-3 flex flex-col">
+
+          {/* Navigation */}
           {navigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
               end
               className={({ isActive }) =>
-                `px-3 py-2 rounded-md text-base font-medium ${isActive
-                  ? "bg-green-600 text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+                `px-3 py-2 rounded-md text-base font-medium ${
+                  isActive
+                    ? "bg-green-600 text-white"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`
               }
             >
               {item.name}
             </NavLink>
           ))}
+
+          <hr className="my-2" />
+
+          {/* Auth Section */}
+          {isAuthenticated ? (
+            <>
+              <button
+                onClick={() => navigate("/profile")}
+                className="text-left px-3 py-2 text-base hover:bg-gray-100 rounded-md"
+              >
+                Profile
+              </button>
+
+              <button
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+                className="text-left px-3 py-2 text-base hover:bg-gray-100 rounded-md text-red-600"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="text-left px-3 py-2 text-base hover:bg-gray-100 rounded-md"
+            >
+              Login
+            </button>
+          )}
         </div>
 
-        {/* MOBILE SEARCH */}
+        {/* Mobile Search */}
         <div className="px-4 pb-4">
           <div className="flex items-center border border-gray-300 rounded-md px-3 py-2">
             <span className="material-symbols-outlined text-gray-500">
@@ -215,6 +254,7 @@ export default function Navbar() {
             />
           </div>
         </div>
+
       </DisclosurePanel>
     </Disclosure>
   );

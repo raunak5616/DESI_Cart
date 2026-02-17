@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LocationContext } from "./location.context";
 
 export const LocationProvider = ({ children }) => {
-  const [address, setAddress] = useState("Select Location");
+  const [address, setAddress] = useState(() => {
+  return localStorage.getItem("deliveryAddress") || "Select Location";
+});
 
-useEffect(() => {
-  const savedAddress = localStorage.getItem("deliveryAddress");
-  if (savedAddress) setAddress(savedAddress);
-}, []);
 
 
   const detectLocation = () => {
