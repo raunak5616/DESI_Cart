@@ -16,16 +16,26 @@ export const Signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
+console.log("BODY:", req.body);
+console.log("FILE:", req.file);
     const hashedPassword = await bcrypt.hash(password, 10);
+let images = null;
 
-    const user = await User.create({
-      name,
-      email,
-      shop,
-      phone,
-      password: hashedPassword,
-    });
+if (req.file) {
+  images = {
+    url: req.file.path,
+    public_id: req.file.filename
+  };
+}
+
+const user = await User.create({
+  name,
+  email,
+  shop,
+  phone,
+  password: hashedPassword,
+  images
+});
 
     res.status(201).json({
       message: "User registered successfully",

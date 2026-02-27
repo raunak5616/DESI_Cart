@@ -6,7 +6,7 @@ import { Login, Signup } from "../controllers/auth.controller.js";
 const router = express.Router();
 
 router.post("/", upload.array("images", 5), createProduct);
-router.post("/signup", Signup);
+router.post("/signup",upload.single("images"), Signup);
 router.post("/login", Login);
 
 export default router;
