@@ -6,9 +6,9 @@ import jwt from "jsonwebtoken";
 
 export const Signup = async (req, res) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { name, shop, email, phone, password } = req.body;
 
-    if (!name || !email || !phone || !password) {
+    if (!name || !shop || !email || !phone || !password) {
       return res.status(400).json({ message: "Please provide all fields" });
     }
 
@@ -22,6 +22,7 @@ export const Signup = async (req, res) => {
     const user = await User.create({
       name,
       email,
+      shop,
       phone,
       password: hashedPassword,
     });
