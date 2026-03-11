@@ -10,6 +10,8 @@ import Login from "../../pages/login";
 import Signup from "../../pages/signup";
 import Profile from "../../pages/profile";
 import Footer from "../../components/footer";
+import { ShopByProduct } from "../../pages/shopByProduct";
+
 
 
 const AppRouter = () => {
@@ -26,6 +28,7 @@ const AppRouter = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/shopproduct" element={<ShopByProduct />} />
       </Routes>
       <Footer />
     </BrowserRouter>

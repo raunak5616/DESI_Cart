@@ -31,6 +31,7 @@ if (req.file) {
 const user = await User.create({
   name,
   email,
+  category:"shop",
   shop,
   phone,
   password: hashedPassword,
@@ -86,6 +87,7 @@ export const Login = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
+      id: user._id,
     });
 
   } catch (error) {

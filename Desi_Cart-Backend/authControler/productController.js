@@ -19,7 +19,7 @@ export const getProducts = async (req,res) =>{
 export const getShop = async (req,res) =>{
     try {
         console.log("🚀 GET SHOP HIT")  ;
-        const shop = await user.find();
+        const shop = await user.find({ category: "shop" });
         res.status(200).json(shop);
     } catch (error) {
         console.log("🔥 GET SHOP ERROR 🔥", error)

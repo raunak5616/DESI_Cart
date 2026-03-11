@@ -1,9 +1,13 @@
-const shopCard = ({shop}) =>{
-    const {
-    images: [{ url } = {}] = [],
-  } = shop || {};
-    return(
-        <Card
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+const ShopCard = ({ shop }) => {
+  const url = shop?.images?.url; 
+
+  return (
+    <Card
       sx={{
         maxWidth: 345,
         boxShadow: 3,
@@ -16,7 +20,7 @@ const shopCard = ({shop}) =>{
         component="img"
         height="194"
         image={url || "/no-image.png"}
-        alt={shop?.name || "product image"}
+        alt={shop?.shop || "shop image"}
       />
 
       <CardContent>
@@ -26,7 +30,11 @@ const shopCard = ({shop}) =>{
           sx={{ p: 1 }}
           className="text-gray-700"
         >
-          {}
+          {shop?.shop}
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary">
+          {shop?.name}
         </Typography>
       </CardContent>
 
@@ -38,8 +46,10 @@ const shopCard = ({shop}) =>{
           gap: 1,
         }}
       >
+        {/* Add buttons here later */}
       </CardActions>
     </Card>
-    )
-}
-export default shopCard;
+  );
+};
+
+export default ShopCard;
