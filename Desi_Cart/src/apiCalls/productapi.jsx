@@ -10,3 +10,13 @@ export const getProducts = async () => {
     throw error;
   }
 };
+export const getProductById = async (id) => {
+  const URL = `${import.meta.env.VITE_MONGO_URI}/productsById/${id}`;
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (error) {
+    console.error("🔥 GET PRODUCT BY ID ERROR 🔥", error);
+    throw error;
+  } 
+};

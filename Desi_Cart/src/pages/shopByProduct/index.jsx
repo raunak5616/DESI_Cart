@@ -1,38 +1,53 @@
-import { useEffect, useState } from "react"
-import { getProducts } from "../../apiCalls/productapi"
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getProductById } from "../../apiCalls/productapi";
 import RecipeReviewCard from "../../components/productCard";
 
-export const ShopByProduct = () =>{
+export const ShopByProduct = () => {
+
+    const { id } = useParams();   // shop id from URL
+
     const [productsbyshop, setProductsByShop] = useState([]);
     const [loading, setLoading] = useState(true);
-    useEffect(()=>{
-        const fetchProductByShop = async () =>{
-        try {
-            const data = await getProducts();
-            setProductsByShop(data);
-        } catch (error) {
-            console.error("🔥 FETCH PRODUCTS by shop ERROR 🔥", error);
-        }finally{
-            setLoading(false);
-        }
-    }
-    fetchProductByShop();
-    },[]);
-    if(loading){
-        return <p>product loading...</p>
-    }
-return(
-    <main className="flex flex-wrap gap-6 justify-center mt-4">
-         {productsbyshop.map((product) => (
-           <div
-             key={product._id || product.id}
-             className="flex"
-             style={{ width: "345px" }}
-           >
-             <RecipeReviewCard product={product} />
-           </div>
-         ))}
-       </main>
-)
-}
 
+    useEffect(() => {
+
+        const fetchProductByShop = async () => {
+            try {
+
+                const data = await getProductById(id);  // pass shop id
+                setProductsByShop(data);
+
+            } catch (error) {
+
+                console.error("🔥 FETCH PRODUCTS BY SHOP ERROR 🔥", error);
+
+            } finally {
+
+                setLoading(false);
+
+            }
+        };
+
+        fetchProductByShop();
+
+    }, [id]);
+
+    if (loading) {
+        return <p>Products are loading...</p>;
+    }
+
+    return (
+        <main className="flex flex-wrap gap-6 justify-center mt-4">
+            {productsbyshop.map((product) => (
+                <div
+                    key={product._id || product.id}
+                    className="flex"
+                    style={{ width: "345px" }}
+                >
+                    <RecipeReviewCard product={product} />
+                </div>
+            ))}
+        </main>
+    );
+};

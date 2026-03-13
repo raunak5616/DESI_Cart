@@ -30,3 +30,25 @@ export const getShop = async (req,res) =>{
         });
     }
 }
+
+export const getProductsByShopId = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        console.log("🚀 GET PRODUCTS BY SHOP HIT:", id);
+
+        const products = await productModel.find({ shop: id });
+
+        res.status(200).json(products);
+
+    } catch (error) {
+
+        console.log("🔥 GET PRODUCTS BY SHOP ERROR 🔥", error);
+
+        res.status(500).json({
+            message: "Failed to fetch shop products",
+            error: error.message
+        });
+    }
+};

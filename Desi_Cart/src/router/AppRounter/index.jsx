@@ -21,14 +21,14 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/Shop" element={<Shop />} />
+        <Route path="/shop" element={<Shop />} />
         <Route path="/Support" element={<Support />} />
         <Route path="/Products" element={<Product />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/shopproduct" element={<ShopByProduct />} />
+        <Route path="/shop/:id" element={<ShopByProduct />} />
       </Routes>
       <Footer />
     </BrowserRouter>

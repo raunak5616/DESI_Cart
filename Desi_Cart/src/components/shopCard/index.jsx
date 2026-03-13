@@ -3,11 +3,12 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-const ShopCard = ({ shop }) => {
+const ShopCard = ({ shop,onClick }) => {
   const url = shop?.images?.url; 
 
   return (
     <Card
+    onClick={()=>onClick(shop._id)}
       sx={{
         maxWidth: 345,
         boxShadow: 3,
