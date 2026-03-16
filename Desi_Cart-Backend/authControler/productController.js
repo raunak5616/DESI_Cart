@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import productModel from "../mongodb/models/productModel.js"
 import user from "../mongodb/models/shop.model.js";
 
@@ -38,8 +39,12 @@ export const getProductsByShopId = async (req, res) => {
 
         console.log("🚀 GET PRODUCTS BY SHOP HIT:", id);
 
-        const products = await productModel.find({ shop: id });
+     
 
+const products = await productModel.find({
+  shopId: new mongoose.Types.ObjectId(id)
+});
+console.log("✅ Products fetched successfully:", products);
         res.status(200).json(products);
 
     } catch (error) {

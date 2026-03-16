@@ -1,21 +1,100 @@
+import axios from "axios";
 import { CartCard } from "../../components/cartCard";
 import { useCart } from "../../context/card.context/useCartContext.js";
-export  const Cart = () => {
+import { useState } from "react";
+export const Cart = () => {
   const { cart } = useCart();
+  const [loading, setLoading] = useState(false);
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   );
-   const handlePayment = async () => {
-  if (cart.length === 0) {
-    alert("Cart is empty");
-    return;
-  }
+  const handlePayment = async () => {
+    if (cart.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/create-order`,
+        { amount: subtotal },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-}
+      const order = res.data;
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: "My E-Commerce",
+        description: "Order Payment",
+        order_id: order.id,
+
+
+        handler: async function (response) {
+          setLoading(false);
+          const verifyRes = await axios.post(
+            `${import.meta.env.VITE_API_URL}/verify-payment`,
+            response,
+            { headers: { "Content-Type": "application/json" } }
+          );
+
+          if (verifyRes.data.success) {
+            alert("Payment Successful ✅");
+          } else {
+            alert("Payment Failed ❌");
+          }
+        },
+
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment Error:", error);
+      alert("Something went wrong");
+    }
+  };
+
 
   return (
     <>
+      <style>
+        {`
+.pay-btn.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.pay-btn.loading::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border: 3px solid white;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+`}
+      </style>
       <div className="cart-page">
         <div className="cart-left">
           <h2 className="section-title">Your Cart</h2>
@@ -58,7 +137,11 @@ export  const Cart = () => {
               <span>Total Amount</span>
               <span>₹{subtotal}</span>
             </div>
-            <button className="pay-btn" onClick={handlePayment}>Proceed to Payment</button>
+            <button
+              className={`pay-btn ${loading ? "loading" : ""}`}
+              onClick={handlePayment}
+              disabled={loading}
+            >{loading ? "Processing" : "Proceed to Payment"}</button>
           </div>
         </div>
       </div>

@@ -15,7 +15,8 @@ export const ShopByProduct = () => {
         const fetchProductByShop = async () => {
             try {
 
-                const data = await getProductById(id);  // pass shop id
+                const data = await getProductById(id);
+                console.log("🔥 shop By Product ===" , data);  // pass shop id
                 setProductsByShop(data);
 
             } catch (error) {
