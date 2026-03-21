@@ -1,16 +1,98 @@
 import { useState } from "react";
-
+import axios from "axios";
 export default function Profile() {
+  const [popup, setpopup] = useState(false);
+  const [image, setimage] = useState(null);
   const [user, setUser] = useState({
-    name: "Raunak Kumar",
-    email: "raunak@example.com",
-    phone: "9876543210",
-    address: "Sitamarhi, Bihar",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
   });
-
+const handleSave = async (e) =>{
+  e.preventDefault();
+  const formdata = new FormData();
+  Object.entries(user).forEach(([key,value])=>{
+    formdata.append(key,value);
+  })
+  if(image){
+    formdata.append("images",image);
+  }
+  try {
+const response = await axios.post("http://localhost:8080/api/profileUpdate",formdata);
+alert(response.data.message);
+setpopup(false);
+    // Make API call to save updated profile
+  } catch (err) {
+    console.log("error updating profile❌❌:",err);
+  }
+}
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+      {popup && (<div className="fixed inset-0 backdrop-blur-md bg-white/30 flex justify-center items-center z-50">
 
+        <div className="bg-white p-6 rounded-xl w-[90%] max-w-md shadow-lg">
+          <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+
+          {/* Name */}
+          <input
+            type="text"
+            placeholder="Name"
+            onChange={(e) => setUser({ ...user, name: e.target.value })}
+            className="w-full border p-2 mb-3 rounded"
+          />
+
+          {/* Email */}
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            className="w-full border p-2 mb-3 rounded"
+          />
+
+          {/* Phone */}
+          <input
+            type="text"
+            placeholder="Phone"
+            onChange={(e) => setUser({ ...user, phone: e.target.value })}
+            className="w-full border p-2 mb-3 rounded"
+          />
+
+          {/* Address */}
+          <textarea
+            placeholder="Address"
+            onChange={(e) => setUser({ ...user, address: e.target.value })}
+            className="w-full border p-2 mb-3 rounded"
+          />
+          <input
+          type="file"
+          onChange={(e) => setimage(e.target.files[0])}
+          className="block w-full text-sm text-gray-600
+                         file:mr-4 file:py-2 file:px-4
+                         file:rounded-lg file:border-0
+                         file:bg-green-500 file:text-white
+                         hover:file:bg-green-600 cursor-pointer"
+          />
+          {/* Buttons */}
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => setpopup(false)}
+              className="px-4 py-2 bg-gray-300 rounded"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-emerald-600 text-white rounded"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+
+      </div>
+      )}
       <div className="max-w-5xl mx-auto">
 
         {/* PROFILE HEADER */}
@@ -25,7 +107,7 @@ export default function Profile() {
               {user.name}
             </h2>
             <p className="text-gray-500">{user.email}</p>
-            <button className="mt-3 bg-emerald-600 text-white px-4 py-1 rounded-md hover:bg-emerald-700 transition">
+            <button className="mt-3 bg-emerald-600 text-white px-4 py-1 rounded-md hover:bg-emerald-700 transition" onClick={() => setpopup(true)}>
               Edit Profile
             </button>
           </div>
@@ -46,7 +128,6 @@ export default function Profile() {
                 <label className="text-sm text-gray-500">Full Name</label>
                 <input
                   type="text"
-                  value={user.name}
                   className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none"
                   readOnly
                 />
@@ -56,7 +137,6 @@ export default function Profile() {
                 <label className="text-sm text-gray-500">Email</label>
                 <input
                   type="email"
-                  value={user.email}
                   className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none"
                   readOnly
                 />
@@ -66,7 +146,6 @@ export default function Profile() {
                 <label className="text-sm text-gray-500">Phone</label>
                 <input
                   type="text"
-                  value={user.phone}
                   className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none"
                   readOnly
                 />
@@ -81,7 +160,6 @@ export default function Profile() {
             </h3>
 
             <textarea
-              value={user.address}
               rows="5"
               className="w-full border rounded-md p-3 focus:ring-2 focus:ring-emerald-500 outline-none"
               readOnly

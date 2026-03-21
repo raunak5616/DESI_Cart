@@ -1,0 +1,13 @@
+import Cloudinary from "../config/cloudinary.js";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+
+const storage = new CloudinaryStorage({
+  Cloudinary,
+  params: {
+    folder: "DESI_Cart",
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
+  },
+});
+
+export const upload = multer({ storage });
