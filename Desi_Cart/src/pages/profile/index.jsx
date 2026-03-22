@@ -19,7 +19,14 @@ const handleSave = async (e) =>{
     formdata.append("images",image);
   }
   try {
-const response = await axios.post("http://localhost:8080/api/profileUpdate",formdata);
+    const token = localStorage.getItem("token");
+const response = await axios.post(`${import.meta.env.VITE_MONGO_URI}/profileUpdate`,formdata,
+   {
+    headers: {
+      Authorization: `Bearer ${token}`, // ✅ IMPORTANT
+    },
+  }
+);
 alert(response.data.message);
 setpopup(false);
     // Make API call to save updated profile

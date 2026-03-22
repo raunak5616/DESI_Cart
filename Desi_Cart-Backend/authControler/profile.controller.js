@@ -2,15 +2,22 @@ export const updateProfile = async (req, res) => {
   try {
     const { name, email, phone, address } = req.body;
 
-    const userId = req.user.id; 
-if (req.file) {
-  images = {
-    url: req.file.path,
-    public_id: req.file.filename
-  };
-}
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    const userId = req.user.id;
+
+    let images = null; // ✅ FIX
+
+    if (req.file) {
+      images = {
+        url: req.file.path,
+        public_id: req.file.filename
+      };
+    }
+
     const updatedUser = await userProfile.findOneAndUpdate(
-      { userId: userId },   
+      { userId: userId },
       {
         name,
         email,
@@ -19,8 +26,8 @@ if (req.file) {
         images
       },
       {
-        new: true,          
-        upsert: true        
+        new: true,
+        upsert: true
       }
     );
 
@@ -30,6 +37,7 @@ if (req.file) {
     });
 
   } catch (error) {
+    console.log("ERROR:", error); // 🔥 add this for debugging
     res.status(500).json({ message: "Error updating profile" });
   }
 };
