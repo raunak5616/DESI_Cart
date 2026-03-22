@@ -20,3 +20,27 @@ export const getProductById = async (id) => {
     throw error;
   } 
 };
+
+export const getProfile = async (id) => {
+  const URL = `${import.meta.env.VITE_MONGO_URI}/profile/${id}`;
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (error) {   
+    console.error("🔥 GET PROFILE ERROR 🔥", error);
+    throw error;
+  }
+};
+
+export const updateProfile = async (id, formData) => {
+  const URL = `${import.meta.env.VITE_MONGO_URI}/profileUpdate`;
+  try {
+    const response = await axios.post(URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("🔥 UPDATE PROFILE ERROR 🔥", error);
+    throw error;
+  }
+};

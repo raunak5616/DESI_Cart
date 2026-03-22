@@ -1,3 +1,5 @@
+import UserProfile from "../mongodb/models/userProfilemodel.js";
+
 export const updateProfile = async (req, res) => {
   try {
     const { name, email, phone, address } = req.body;
@@ -16,7 +18,7 @@ export const updateProfile = async (req, res) => {
       };
     }
 
-    const updatedUser = await userProfile.findOneAndUpdate(
+    const updatedUser = await UserProfile.findOneAndUpdate(
       { userId: userId },
       {
         name,
@@ -39,5 +41,20 @@ export const updateProfile = async (req, res) => {
   } catch (error) {
     console.log("ERROR:", error); // 🔥 add this for debugging
     res.status(500).json({ message: "Error updating profile" });
+  }
+};
+
+export const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const profile = await UserProfile.findOne({ userId: userId });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+    res.status(200).json(profile);
+  } catch (error) {
+    console.log("ERROR:", error); // 🔥 add this for debugging
+    res.status(500).json({ message: "Error fetching profile" });
   }
 };

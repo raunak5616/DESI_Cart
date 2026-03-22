@@ -1,6 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../context/auth.context";
+import { useEffect } from "react";
+import { getProfile } from "../../apiCalls/productapi";
 export default function Profile() {
+  const {logout} = useAuth();
+  const navigater = useNavigate();
   const [popup, setpopup] = useState(false);
   const [image, setimage] = useState(null);
   const [user, setUser] = useState({
@@ -9,6 +15,14 @@ export default function Profile() {
     phone: "",
     address: "",
   });
+  const {id} = useParams();
+  useEffect(()=>{
+    const fetchProfile = async (id) =>{
+      const data = await getProfile(id);
+      setUser(data);
+    }
+    fetchProfile(id);
+  },[id]);
 const handleSave = async (e) =>{
   e.preventDefault();
   const formdata = new FormData();
@@ -20,6 +34,7 @@ const handleSave = async (e) =>{
   }
   try {
     const token = localStorage.getItem("token");
+    console.log("Token:", token); // ✅ add this for debugging
 const response = await axios.post(`${import.meta.env.VITE_MONGO_URI}/profileUpdate`,formdata,
    {
     headers: {
@@ -31,8 +46,13 @@ alert(response.data.message);
 setpopup(false);
     // Make API call to save updated profile
   } catch (err) {
+    if (err.response?.status === 401) {
+    alert("Session expired. Please login again.");
+    logout();
+    navigater("/login");
+    // redirect to login
     console.log("error updating profile❌❌:",err);
-  }
+    }}
 }
   return (
     <div className="min-h-screen bg-gray-50 p-6">
