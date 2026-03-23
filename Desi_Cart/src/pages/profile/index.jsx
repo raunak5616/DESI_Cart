@@ -65,6 +65,7 @@ setpopup(false);
           <input
             type="text"
             placeholder="Name"
+            value={user?.name || ""}
             onChange={(e) => setUser({ ...user, name: e.target.value })}
             className="w-full border p-2 mb-3 rounded"
           />
@@ -73,6 +74,7 @@ setpopup(false);
           <input
             type="email"
             placeholder="Email"
+            value={user?.email || ""}
             onChange={(e) => setUser({ ...user, email: e.target.value })}
             className="w-full border p-2 mb-3 rounded"
           />
@@ -81,6 +83,7 @@ setpopup(false);
           <input
             type="text"
             placeholder="Phone"
+            value={user?.phone || ""}
             onChange={(e) => setUser({ ...user, phone: e.target.value })}
             className="w-full border p-2 mb-3 rounded"
           />
@@ -88,6 +91,7 @@ setpopup(false);
           {/* Address */}
           <textarea
             placeholder="Address"
+            value={user?.address || ""}
             onChange={(e) => setUser({ ...user, address: e.target.value })}
             className="w-full border p-2 mb-3 rounded"
           />
@@ -125,8 +129,12 @@ setpopup(false);
         {/* PROFILE HEADER */}
         <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row items-center gap-6">
 
-          <div className="w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-3xl font-bold">
-            {user.name.charAt(0)}
+          <div className="w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-3xl font-bold overflow-hidden">
+            {user?.images?.url ? (
+              <img src={user.images.url} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              user?.name?.charAt(0) || "U"
+            )}
           </div>
 
           <div className="text-center md:text-left">
@@ -155,7 +163,8 @@ setpopup(false);
                 <label className="text-sm text-gray-500">Full Name</label>
                 <input
                   type="text"
-                  className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  value={user?.name || ""}
+                  className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50"
                   readOnly
                 />
               </div>
@@ -164,7 +173,8 @@ setpopup(false);
                 <label className="text-sm text-gray-500">Email</label>
                 <input
                   type="email"
-                  className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  value={user?.email || ""}
+                  className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50"
                   readOnly
                 />
               </div>
@@ -173,7 +183,8 @@ setpopup(false);
                 <label className="text-sm text-gray-500">Phone</label>
                 <input
                   type="text"
-                  className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  value={user?.phone || ""}
+                  className="w-full border rounded-md p-2 mt-1 focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50"
                   readOnly
                 />
               </div>
@@ -188,7 +199,8 @@ setpopup(false);
 
             <textarea
               rows="5"
-              className="w-full border rounded-md p-3 focus:ring-2 focus:ring-emerald-500 outline-none"
+              value={user?.address || ""}
+              className="w-full border rounded-md p-3 focus:ring-2 focus:ring-emerald-500 outline-none bg-gray-50"
               readOnly
             />
 

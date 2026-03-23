@@ -1,4 +1,5 @@
 import UserProfile from "../mongodb/models/userProfilemodel.js";
+import User from "../mongodb/models/userModel.js";
 
 export const updateProfile = async (req, res) => {
   try {
@@ -8,11 +9,10 @@ export const updateProfile = async (req, res) => {
     console.log("FILE:", req.file);
 
     const userId = req.user.id;
-
-    let images = null; // ✅ FIX
+    const updateData = { name, email, phone, address };
 
     if (req.file) {
-      images = {
+      updateData.images = {
         url: req.file.path,
         public_id: req.file.filename
       };
@@ -20,13 +20,7 @@ export const updateProfile = async (req, res) => {
 
     const updatedUser = await UserProfile.findOneAndUpdate(
       { userId: userId },
-      {
-        name,
-        email,
-        phone,
-        address,
-        images
-      },
+      updateData,
       {
         new: true,
         upsert: true
@@ -50,11 +44,20 @@ export const getProfile = async (req, res) => {
     const profile = await UserProfile.findOne({ userId: userId });
 
     if (!profile) {
-      return res.status(404).json({ message: "Profile not found" });
+      const basicUser = await User.findById(userId);
+      if (!basicUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json({
+        name: basicUser.name,
+        email: basicUser.email,
+        phone: basicUser.phone,
+        address: ""
+      });
     }
     res.status(200).json(profile);
   } catch (error) {
-    console.log("ERROR:", error); // 🔥 add this for debugging
+    console.log("ERROR:", error);
     res.status(500).json({ message: "Error fetching profile" });
   }
 };

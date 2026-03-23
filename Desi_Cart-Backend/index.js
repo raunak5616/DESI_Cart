@@ -6,6 +6,8 @@ import { connectDB } from "./mongodb/connection/connection.js";
 import auth from "./router/index.js";
 import razorpay from "./utils/razorpay.js";
 import crypto from "crypto";
+import Order from "./mongodb/models/paymentModel.js";
+import UserData from "./mongodb/models/userDataModel.js";
 
 dotenv.config();
 
@@ -27,13 +29,22 @@ app.get("/", (req, res) => {
 
 app.post("/create-order", async (req, res) => {
   try {
-    const { amount } = req.body;
+    const { amount, userId, cartItems } = req.body;
 
     const order = await razorpay.orders.create({
       amount: amount * 100,
       currency: "INR",
       receipt: "order_" + Date.now(),
     });
+
+    const newOrder = new Order({
+      userId,
+      items: cartItems,
+      amount,
+      razorpay_order_id: order.id,
+      status: "Pending"
+    });
+    await newOrder.save();
 
     res.json(order);
   } catch (error) {
@@ -42,7 +53,17 @@ app.post("/create-order", async (req, res) => {
   }
 });
 
-app.post("/verify-payment", (req, res) => {
+app.post("/update-payment-status", async (req, res) => {
+  try {
+    const { razorpay_order_id, status } = req.body;
+    await Order.findOneAndUpdate({ razorpay_order_id }, { status });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+app.post("/verify-payment", async (req, res) => {
   try {
     const {
       razorpay_order_id,
@@ -57,13 +78,56 @@ app.post("/verify-payment", (req, res) => {
       .update(body)
       .digest("hex");
 
-    if (expectedSignature === razorpay_signature) {
-      res.json({ success: true, message: "Payment verified" });
+    const isAuthentic = expectedSignature === razorpay_signature;
+
+    const existingOrder = await Order.findOne({ razorpay_order_id });
+    if (existingOrder) {
+      existingOrder.razorpay_payment_id = razorpay_payment_id;
+      existingOrder.razorpay_signature = razorpay_signature;
+      existingOrder.status = isAuthentic ? "Success" : "Failed";
+      await existingOrder.save();
+    }
+
+    if (isAuthentic) {
+      res.json({ success: true, message: "Payment verified", order: existingOrder });
     } else {
-      res.status(400).json({ success: false, message: "Invalid signature" });
+      res.status(400).json({ success: false, message: "Invalid signature", order: existingOrder });
     }
   } catch (err) {
     res.status(500).json({ error: "Verification failed" });
+  }
+});
+
+// Sync Cart & Favorites
+app.get("/user-data/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    let userData = await UserData.findOne({ userId });
+    
+    if (!userData) {
+      userData = await UserData.create({ userId, cart: [], favourite: [] });
+    }
+    
+    res.json(userData);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch user data" });
+  }
+});
+
+app.post("/user-data/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { cart, favourite } = req.body;
+    
+    const updatedData = await UserData.findOneAndUpdate(
+      { userId },
+      { cart, favourite },
+      { new: true, upsert: true }
+    );
+    
+    res.json({ success: true, data: updatedData });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to sync user data" });
   }
 });
 

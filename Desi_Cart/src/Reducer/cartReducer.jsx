@@ -1,5 +1,11 @@
 export const cartReducer = (state, { type, payload }) => {
   switch (type) {
+    case "SET_INITIAL_DATA":
+      return {
+        ...state,
+        cart: payload.cart || [],
+        favourite: payload.favourite || []
+      };
 
     case "ADD_TO_CART":
       return {
@@ -16,13 +22,13 @@ export const cartReducer = (state, { type, payload }) => {
     case "ADD_TO_FAVORITE":
       return {
         ...state,
-        favorite: [...state.favorite, payload],
+        favourite: [...state.favourite, payload],
       };
 
     case "REMOVE_FROM_FAVORITE":
       return {
         ...state,
-        favorite: state.favorite.filter(item => item._id !== payload),
+        favourite: state.favourite.filter(item => item._id !== payload),
       };
 
     case "INCREMENT_QTY":

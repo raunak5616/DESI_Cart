@@ -36,7 +36,7 @@ export const signup = async (req, res) => {
     return res.status(201).json({
       message: "User registered successfully",
       user: {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         phone: user.phone,
@@ -98,7 +98,7 @@ console.log("REQ BODY 👉", req.body);
       message: "Login successful",
       token,
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         name: user.name,
       },

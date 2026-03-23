@@ -12,9 +12,9 @@ import {
 import { useLocationContext } from "../../context/locationContext/useLocationContext";
 import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useAuth } from "../../context/auth.context";
-
+import { getProfile } from "../../apiCalls/productapi";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Shop", href: "/shop" },
@@ -23,9 +23,24 @@ const navigation = [
 ];
 
 export default function Navbar() {
-  const { isAuthenticated, logout,user } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
   const { address, detectLocation } = useLocationContext();
+  const [avatar, setAvatar] = useState(null);
+
+  useEffect(() => {
+    if (user?._id) {
+      getProfile(user._id)
+        .then((data) => {
+          if (data?.images?.url) {
+            setAvatar(data.images.url);
+          }
+        })
+        .catch((error) => console.error("Failed to load navbar profile photo", error));
+    } else {
+      setAvatar(null);
+    }
+  }, [user?._id]);
 
   const handleCartClick = () => {
     if (!isAuthenticated) {
@@ -77,10 +92,9 @@ export default function Navbar() {
                   to={item.href}
                   end
                   className={({ isActive }) =>
-                    `px-3 py-2 rounded-md text-sm font-medium transition ${
-                      isActive
-                        ? "bg-green-600 text-white"
-                        : "text-gray-700 hover:bg-gray-100"
+                    `px-3 py-2 rounded-md text-sm font-medium transition ${isActive
+                      ? "bg-green-600 text-white"
+                      : "text-gray-700 hover:bg-gray-100"
                     }`
                   }
                 >
@@ -115,6 +129,14 @@ export default function Navbar() {
               </span>
             </button>
 
+            <button
+              onClick={() => navigate("/favorite")}
+              className="p-2 rounded-md hover:bg-gray-100">
+              <span className="material-symbols-outlined">
+                favorite
+              </span>
+            </button>
+
             {/* NOTIFICATION */}
             <button className="p-2 rounded-md hover:bg-gray-100">
               <BellIcon className="h-6 w-6 text-gray-700" />
@@ -124,9 +146,9 @@ export default function Navbar() {
             <Menu as="div" className="relative hidden lg:block">
               <MenuButton>
                 <img
-                  className="h-8 w-8 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
-                  alt=""
+                  className="h-8 w-8 rounded-full object-cover"
+                  src={avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"}
+                  alt="Profile"
                 />
               </MenuButton>
 
@@ -166,10 +188,10 @@ export default function Navbar() {
                   ) : (
                     <MenuItem>
                       <button
-                         onClick={() => {
-    if (!user?._id) return;
-    navigate(`/profile/${user._id}`);
-  }}
+                        onClick={() => {
+                          if (!user?._id) return;
+                          navigate(`/profile/${user._id}`);
+                        }}
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                       >
                         Login
@@ -201,10 +223,9 @@ export default function Navbar() {
               to={item.href}
               end
               className={({ isActive }) =>
-                `px-3 py-2 rounded-md text-base font-medium ${
-                  isActive
-                    ? "bg-green-600 text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                `px-3 py-2 rounded-md text-base font-medium ${isActive
+                  ? "bg-green-600 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
                 }`
               }
             >
@@ -219,9 +240,9 @@ export default function Navbar() {
             <>
               <button
                 onClick={() => {
-    if (!user?._id) return;
-    navigate(`/profile/${user._id}`);
-  }}
+                  if (!user?._id) return;
+                  navigate(`/profile/${user._id}`);
+                }}
                 className="text-left px-3 py-2 text-base hover:bg-gray-100 rounded-md"
               >
                 Profile

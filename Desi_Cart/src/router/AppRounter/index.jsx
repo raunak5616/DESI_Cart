@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import Home from "../../pages/home";
-import {Cart} from "../../pages/cart";
+import { Cart } from "../../pages/cart";
 import Contact from "../../pages/contact";
 import Shop from "../../pages/shop";
 import Support from "../../pages/support";
@@ -11,7 +11,7 @@ import Signup from "../../pages/signup";
 import Profile from "../../pages/profile";
 import Footer from "../../components/footer";
 import { ShopByProduct } from "../../pages/shopByProduct";
-
+import Favorite from "../../pages/fav";
 
 
 const AppRouter = () => {
@@ -29,6 +29,7 @@ const AppRouter = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/shop/:id" element={<ShopByProduct />} />
+        <Route path="favorite" element={<Favorite />} />
       </Routes>
       <Footer />
     </BrowserRouter>

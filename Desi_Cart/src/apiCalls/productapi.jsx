@@ -24,7 +24,12 @@ export const getProductById = async (id) => {
 export const getProfile = async (id) => {
   const URL = `${import.meta.env.VITE_MONGO_URI}/profile/${id}`;
   try {
-    const response = await axios.get(URL);
+    const token = localStorage.getItem("token");
+    const response = await axios.get(URL, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {   
     console.error("🔥 GET PROFILE ERROR 🔥", error);
