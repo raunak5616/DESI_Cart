@@ -9,7 +9,10 @@ export const Cart = () => {
     (acc, item) => acc + item.price * item.qty,
     0
   );
+
+  console.log("Cart Items:", cart);
   const handlePayment = async () => {
+    debugger;
     if (cart.length === 0) {
       alert("Cart is empty");
       return;
@@ -101,7 +104,7 @@ export const Cart = () => {
           <div className="cart-items">
             {cart.length > 0 ? (
               cart.map((item) => (
-                <CartCard key={item.id} item={item} />
+                <CartCard key={item._id} item={item} />
               ))
             ) : (
               <p>Your cart is empty</p>
@@ -112,7 +115,7 @@ export const Cart = () => {
           <h2 className="section-title">Order Summary</h2>
           <div className="summary-card">
             {cart.map((item) => (
-              <div className="summary-row" key={item.id}>
+              <div className="summary-row" key={item._id}>
                 <span>
                   ({item.title} × {item.qty})
                 </span>

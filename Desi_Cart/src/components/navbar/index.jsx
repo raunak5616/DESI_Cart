@@ -23,7 +23,7 @@ const navigation = [
 ];
 
 export default function Navbar() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout,user } = useAuth();
   const navigate = useNavigate();
   const { address, detectLocation } = useLocationContext();
 
@@ -166,7 +166,10 @@ export default function Navbar() {
                   ) : (
                     <MenuItem>
                       <button
-                        onClick={() => navigate("/login")}
+                         onClick={() => {
+    if (!user?._id) return;
+    navigate(`/profile/${user._id}`);
+  }}
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                       >
                         Login
@@ -215,7 +218,10 @@ export default function Navbar() {
           {isAuthenticated ? (
             <>
               <button
-                onClick={() => navigate("/profile")}
+                onClick={() => {
+    if (!user?._id) return;
+    navigate(`/profile/${user._id}`);
+  }}
                 className="text-left px-3 py-2 text-base hover:bg-gray-100 rounded-md"
               >
                 Profile

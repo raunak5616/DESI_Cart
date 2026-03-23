@@ -5,7 +5,7 @@ import RecipeReviewCard from "../../components/productCard";
 
 export const ShopByProduct = () => {
 
-    const { id } = useParams();   // shop id from URL
+    const { id } = useParams();   
 
     const [productsbyshop, setProductsByShop] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -11,21 +11,21 @@ import { findCart } from "../../utils/findCartitem";
 
 export default function RecipeReviewCard({ product }) {
   const { cartDispatch, cart , favourite } = useCart();
-  const isFavorite = findFavroite(favourite, product?.id);
-  const isInCart = findCart(cart, product?.id);
+  const isFavorite = findFavroite(favourite, product?._id);
+  const isInCart = findCart(cart, product?._id);
   const {
     images: [{ url } = {}] = [],
   } = product || {};
   const onFavoriteClick = () => {
     cartDispatch({
       type: isFavorite?"REMOVE_FROM_FAVORITE":"ADD_TO_FAVORITE",
-      payload:isFavorite?product.id:product,
+      payload:isFavorite?product._id:product,
     })
   };
   const onCartClick = () => {
     cartDispatch({
       type: isInCart?"REMOVE_FROM_CART":"ADD_TO_CART",
-      payload: isInCart?product.id:product,
+      payload: isInCart?product._id:product,
     })
   };
 

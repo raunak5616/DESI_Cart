@@ -29,7 +29,8 @@ const Login = () => {
         });
       alert(response.data.message);
       const token = response.data.token;
-      login(token);
+      const userData = response.data.user; // ✅ assuming the user data is returned in the response
+      login(userData,token);
       navigate("/");
     } catch (error) {
       console.log(error);
