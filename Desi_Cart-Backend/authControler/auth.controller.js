@@ -89,7 +89,7 @@ console.log("REQ BODY 👉", req.body);
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        dexpiresIn: "7d",
       }
     );
 
