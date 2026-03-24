@@ -24,18 +24,7 @@ export const CartCard = ({ item }) => {
             payload: item._id,
         });
     };
-    const cartRemove = () => {
-        cartDispatch({
-            type: "REMOVE_FROM_CART",
-            payload: item._id,
-        });
-    }
-    const addToFav = () => {
-        cartDispatch({
-            type: "ADD_TO_FAVORITE",
-            payload: item,
-        })
-    }
+
     return (
         <div className="container1">
             <div className="product">
@@ -59,8 +48,8 @@ export const CartCard = ({ item }) => {
                     <div className="slug">{item?.slug}</div>
 
                     <div className="actions">
-                        <span onClick={addToFav}>❤️</span>
-                        <span onClick={cartRemove}>❌</span>
+                        <span>❤️</span>
+                        <span>❌</span>
                     </div>
                 </div>
 
