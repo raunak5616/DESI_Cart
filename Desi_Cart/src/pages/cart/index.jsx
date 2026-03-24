@@ -2,20 +2,16 @@ import axios from "axios";
 import { CartCard } from "../../components/cartCard";
 import { useCart } from "../../context/card.context/useCartContext.js";
 import { useState } from "react";
-import { useAuth } from "../../context/auth.context";
-
 export const Cart = () => {
   const { cart } = useCart();
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   );
-
+  
   console.log("Cart Items:", cart);
   const handlePayment = async () => {
-    debugger;
     if (cart.length === 0) {
       alert("Cart is empty");
       return;
@@ -24,7 +20,7 @@ export const Cart = () => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/create-order`,
-        { amount: subtotal, userId: user?._id, cartItems: cart },
+        { amount: subtotal },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -38,11 +34,12 @@ export const Cart = () => {
         description: "Order Payment",
         order_id: order.id,
 
+
         handler: async function (response) {
           setLoading(false);
           const verifyRes = await axios.post(
             `${import.meta.env.VITE_API_URL}/verify-payment`,
-            { ...response },
+            response,
             { headers: { "Content-Type": "application/json" } }
           );
 
@@ -54,21 +51,8 @@ export const Cart = () => {
         },
 
         theme: {
-          color: "#3399cc"
+          color: "#3399cc",
         },
-        modal: {
-          ondismiss: async function () {
-            setLoading(false);
-            try {
-              await axios.post(
-                `${import.meta.env.VITE_API_URL}/update-payment-status`,
-                { razorpay_order_id: order.id, status: "Cancelled" },
-                { headers: { "Content-Type": "application/json" } }
-              );
-            } catch (err) { }
-            alert("Payment Cancelled ❌");
-          }
-        }
       };
 
       const rzp = new window.Razorpay(options);
