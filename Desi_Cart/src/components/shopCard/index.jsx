@@ -8,33 +8,57 @@ const ShopCard = ({ shop,onClick }) => {
 
   return (
     <Card
-    onClick={()=>onClick(shop._id)}
+      onClick={() => onClick(shop._id)}
       sx={{
-        maxWidth: 345,
+        width: 345,
+        height: 380,
         boxShadow: 3,
         display: "flex",
         flexDirection: "column",
-        height: "100%",
+        cursor: "pointer",
       }}
     >
       <CardMedia
         component="img"
-        height="194"
         image={url || "/no-image.png"}
         alt={shop?.shop || "shop image"}
+        sx={{
+          height: 200,
+          objectFit: "contain",
+          bgcolor: "white",
+          p: 1,
+        }}
       />
 
-      <CardContent>
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography
           component="div"
           fontWeight="bold"
-          sx={{ p: 1 }}
+          sx={{
+            p: 1,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+          }}
           className="text-gray-700"
         >
           {shop?.shop}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            p: 1,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {shop?.name}
         </Typography>
       </CardContent>

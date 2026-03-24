@@ -10,7 +10,7 @@ import { findCart } from "../../utils/findCartitem";
 
 
 export default function RecipeReviewCard({ product }) {
-  const { cartDispatch, cart , favourite } = useCart();
+  const { cartDispatch, cart, favourite } = useCart();
   const isFavorite = findFavroite(favourite, product?._id);
   const isInCart = findCart(cart, product?._id);
   const {
@@ -18,39 +18,54 @@ export default function RecipeReviewCard({ product }) {
   } = product || {};
   const onFavoriteClick = () => {
     cartDispatch({
-      type: isFavorite?"REMOVE_FROM_FAVORITE":"ADD_TO_FAVORITE",
-      payload:isFavorite?product._id:product,
+      type: isFavorite ? "REMOVE_FROM_FAVORITE" : "ADD_TO_FAVORITE",
+      payload: isFavorite ? product._id : product,
     })
   };
   const onCartClick = () => {
     cartDispatch({
-      type: isInCart?"REMOVE_FROM_CART":"ADD_TO_CART",
-      payload: isInCart?product._id:product,
+      type: isInCart ? "REMOVE_FROM_CART" : "ADD_TO_CART",
+      payload: isInCart ? product._id : product,
     })
   };
 
   return (
     <Card
       sx={{
+        width: "100%",
         maxWidth: 345,
+        minHeight: 450,
         boxShadow: 3,
         display: "flex",
         flexDirection: "column",
-        height: "100%",
+        margin: "auto", // center if smaller than container
       }}
     >
       <CardMedia
         component="img"
-        height="194"
         image={url || "/no-image.png"}
         alt={product?.name || "product image"}
+        sx={{
+          height: 200,
+          objectFit: "contain",
+          bgcolor: "white",
+          p: 1,
+        }}
       />
 
-      <CardContent>
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography
           component="div"
           fontWeight="bold"
-          sx={{ p: 1 }}
+          sx={{
+            p: 1,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            height: "3.6em", // fixed height for 2 lines
+          }}
           className="text-gray-700"
         >
           {product?.description}

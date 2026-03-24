@@ -27,6 +27,13 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { address, detectLocation } = useLocationContext();
   const [avatar, setAvatar] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter" && searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
 
   useEffect(() => {
     if (user?._id) {
@@ -108,13 +115,16 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
 
             {/* SEARCH (Desktop only) */}
-            <div className="hidden lg:flex items-center border border-gray-300 rounded-md px-3 py-1.5">
+            <div className="hidden lg:flex items-center border border-gray-300 rounded-md px-3 py-1.5 focus-within:border-green-500 transition-colors">
               <span className="material-symbols-outlined text-gray-500 text-[20px]">
                 search
               </span>
               <input
                 type="text"
                 placeholder="Search products"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={handleSearch}
                 className="ml-2 w-40 bg-transparent text-sm outline-none"
               />
             </div>
@@ -188,10 +198,7 @@ export default function Navbar() {
                   ) : (
                     <MenuItem>
                       <button
-                        onClick={() => {
-                          if (!user?._id) return;
-                          navigate(`/profile/${user._id}`);
-                        }}
+                        onClick={() => navigate("/login")}
                         className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                       >
                         Login
@@ -270,13 +277,16 @@ export default function Navbar() {
 
         {/* Mobile Search */}
         <div className="px-4 pb-4">
-          <div className="flex items-center border border-gray-300 rounded-md px-3 py-2">
+          <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 focus-within:border-green-500">
             <span className="material-symbols-outlined text-gray-500">
               search
             </span>
             <input
               type="text"
               placeholder="Search products"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearch}
               className="ml-2 w-full bg-transparent text-sm outline-none"
             />
           </div>
