@@ -14,4 +14,17 @@ router.post("/signup",signup);
 router.post("/login",Login);
 router.post("/profileUpdate",verifyToken,upload.single("images"),updateProfile);
 
+// Orders
+router.get("/orders/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { Order } = await import("../mongodb/models/paymentModel.js"); // dynamic import to avoid circular or early load issues
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch order history" });
+  }
+});
+
+
 export default router;

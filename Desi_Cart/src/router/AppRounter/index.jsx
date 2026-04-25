@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import Home from "../../pages/home";
-import {Cart} from "../../pages/cart";
+import { Cart } from "../../pages/cart";
 import Contact from "../../pages/contact";
 import Shop from "../../pages/shop";
 import Support from "../../pages/support";
@@ -26,6 +26,7 @@ const AppRouter = () => {
         <Route path="/Products" element={<Product />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/shop/:id" element={<ShopByProduct />} />

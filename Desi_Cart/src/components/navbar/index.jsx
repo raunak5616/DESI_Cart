@@ -176,7 +176,10 @@ export default function Navbar() {
                     <>
                       <MenuItem>
                         <button
-                          onClick={() => navigate("/profile")}
+                          onClick={() => {
+                            if (!user?._id) return;
+                            navigate(`/profile/${user._id}`);
+                          }}
                           className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                         >
                           Profile
